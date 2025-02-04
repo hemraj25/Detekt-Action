@@ -75,12 +75,11 @@ runs:
   using: 'composite'
   steps:
     - name: Login to Docker Hub
-      #if: ${{ secrets.DOCKER_USERNAME && secrets.DOCKER_TOKEN }}
       uses: docker/login-action@v3
       with:
-        registry: ${{ secrets.DOCKER_REGISTRY || 'docker.io' }}
-        username: ${{ secrets.DOCKER_USERNAME }}
-        password: ${{ secrets.DOCKER_TOKEN }}
+        registry: ${{ inputs.docker_registry }}
+        username: ${{ inputs.docker_username }}
+        password: ${{ inputs.docker_token }}
 
     - name: Run detekt with reviewdog
       uses: docker://Dockerfile
