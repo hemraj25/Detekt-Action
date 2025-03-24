@@ -47,10 +47,14 @@ fi
 echo "$detekt_command"
 eval "$detekt_command"
 
+EXIT_CODE=$?
+
+# Print the status code
+echo "Detekt command exited with status code: $EXIT_CODE"
+
 reviewdog -f=checkstyle -name="detekt" -reporter="${INPUT_REVIEWDOG_REPORTER}" \
   -level="${INPUT_REVIEWDOG_LEVEL}" -filter-mode="${INPUT_REVIEWDOG_FILTER}" <detekt_report.xml
-  
-EXIT_CODE=$?
+
 if [ $EXIT_CODE -ne 0 ]; then
   echo "***********************************************"
   echo "                 detekt failed                 "
