@@ -6,18 +6,6 @@ inputs:
   github_token:
     description: 'GITHUB_TOKEN'
     required: true
-  docker_registry:
-    description: 'Name of Docker registry (e.g., docker.io, ghcr.io)'
-    required: false
-    default: 'docker.io'
-  docker_username:
-    description: 'Docker registry username'
-    required: false
-    default: ''
-  docker_token:
-    description: 'Docker registry PAT token'
-    required: false
-    default: ''
   reviewdog_level:
     description: 'Report level for reviewdog [info,warning,error]'
     required: false
@@ -72,32 +60,22 @@ inputs:
       Example: 'path/to/dir1,path/to/dir2'
     required: false
 runs:
-  using: 'composite'
-  steps:
-    - name: Login to Docker Hub
-      uses: docker/login-action@v3
-      with:
-        registry: ${{ inputs.docker_registry }}
-        username: ${{ inputs.docker_username }}
-        password: ${{ inputs.docker_token }}
-
-    - name: Run detekt with reviewdog
-      uses: docker://Dockerfile
-      with:
-        args: >-
-          ${{ inputs.github_token }}
-          ${{ inputs.reviewdog_level }}
-          ${{ inputs.reviewdog_filter }}
-          ${{ inputs.reviewdog_reporter }}
-          ${{ inputs.detekt_config }}
-          ${{ inputs.detekt_excludes }}
-          ${{ inputs.fail_on_error }}
-          ${{ inputs.detekt_plugins }}
-          ${{ inputs.detekt_baseline }}
-          ${{ inputs.detekt_parallel }}
-          ${{ inputs.detekt_build_upon_default_config }}
-          ${{ inputs.detekt_all_rules }}
-          ${{ inputs.detekt_input }}
+  using: 'docker'
+  image: 'Dockerfile'
+  args:
+    - ${{ inputs.github_token }}
+    - ${{ inputs.reviewdog_level }}
+    - ${{ inputs.reviewdog_filter }}
+    - ${{ inputs.reviewdog_reporter }}
+    - ${{ inputs.detekt_config }}
+    - ${{ inputs.detekt_excludes }}
+    - ${{ inputs.fail_on_error }}
+    - ${{ inputs.detekt_plugins }}
+    - ${{ inputs.detekt_baseline }}
+    - ${{ inputs.detekt_parallel }}
+    - ${{ inputs.detekt_build_upon_default_config }}
+    - ${{ inputs.detekt_all_rules }}
+    - ${{ inputs.detekt_input }}
 branding:
   icon: 'check-square'
   color: 'orange'

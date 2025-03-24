@@ -49,3 +49,12 @@ eval "$detekt_command"
 
 reviewdog -f=checkstyle -name="detekt" -reporter="${INPUT_REVIEWDOG_REPORTER}" \
   -level="${INPUT_REVIEWDOG_LEVEL}" -filter-mode="${INPUT_REVIEWDOG_FILTER}" <detekt_report.xml
+  
+EXIT_CODE=$?
+if [ $EXIT_CODE -ne 0 ]; then
+  echo "***********************************************"
+  echo "                 detekt failed                 "
+  echo " Please fix the above issues before committing "
+  echo "***********************************************"
+  exit $EXIT_CODE
+fi
